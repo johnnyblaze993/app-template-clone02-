@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.backend
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, data, data-jdbc, gradle, http-client, jackson-databind, java, java-application, jdbc-hikari, jib, junit, logback, micronaut-aot, micronaut-build, micronaut-http-validation, micronaut-test-rest-assured, netty-server, postgres, reactor, reactor-http-client, readme, security-annotations, security-jwt, shade, test-resources, yaml, yaml-build]

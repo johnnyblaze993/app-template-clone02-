@@ -1,0 +1,40 @@
+micronaut:
+  application:
+    name: server
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowed-origins:
+            - "http://localhost:7001"
+          allowed-methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+          allowed-headers:
+            - Authorization
+            - Content-Type
+            - X-Requested-With
+  security:
+    enabled: false
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+# datasources:
+#   default:
+#     url: jdbc:postgresql://db:5432/digimondb
+#     driver-class-name: org.postgresql.Driver
+#     username: postgres
+#     password: mysecretpassword
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/digimondb
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: mysecretpassword
