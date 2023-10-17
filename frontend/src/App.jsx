@@ -13,23 +13,45 @@ function App() {
 
 	return (
 		<>
-			<h2>Digi app - Clone02</h2>
-			<button onClick={fetchDigimons}>Load Digimons</button>
+			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>Johns app</h2>
+			<button
+				style={{
+					display: "block",
+					margin: "0 auto 20px",
+					padding: "10px 20px",
+					backgroundColor: "#4CAF50",
+					color: "white",
+					borderRadius: "5px",
+					border: "none",
+					cursor: "pointer",
+				}}
+				onClick={fetchDigimons}
+			>
+				Load Digimons !
+			</button>
 			<div style={{ display: "flex", flexWrap: "wrap" }}>
 				{digimons.map((digimon) => (
 					<div
 						key={digimon.id}
 						style={{
-							border: "1px solid black",
+							border: "1px solid #ddd",
 							margin: "10px",
 							padding: "10px",
 							width: "200px",
 							borderRadius: "10px",
+							boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+							transition: "0.3s",
 						}}
 					>
-						<h3>{digimon.name}</h3>
-						<p>Type: {digimon.type}</p>
-						<p>Number: {digimon.digimonNumber}</p>
+						<h3 style={{ textAlign: "center", marginBottom: "10px" }}>
+							{digimon.name}
+						</h3>
+						<p style={{ textAlign: "center", marginBottom: "5px" }}>
+							Type: {digimon.type}
+						</p>
+						<p style={{ textAlign: "center", marginBottom: "5px" }}>
+							Number: {digimon.digimonNumber}
+						</p>
 					</div>
 				))}
 			</div>

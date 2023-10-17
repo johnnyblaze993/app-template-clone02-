@@ -35,8 +35,7 @@
 
 # volumes:
 #   postgres-data:
-
-# # BIND MOUNTED VERSION
+# # # BIND MOUNTED VERSION
 
 version: "3.8"
 
