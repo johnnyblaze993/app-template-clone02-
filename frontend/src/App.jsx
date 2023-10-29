@@ -6,14 +6,21 @@ function App() {
 	const [digimons, setDigimons] = useState([]);
 
 	const fetchDigimons = () => {
-		axios.get("http://localhost:8080/digimon").then((response) => {
-			setDigimons(response.data);
-		});
+		axios
+			.get("http://localhost:8080/digimon")
+			.then((response) => {
+				setDigimons(response.data);
+			})
+			.then((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
 		<>
-			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>Johns app</h2>
+			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+				Johns app!!!
+			</h2>
 			<button
 				style={{
 					display: "block",

@@ -7,7 +7,7 @@ micronaut:
       configurations:
         web:
           allowed-origins:
-            - "http://localhost:7001"
+            - "*"
           allowed-methods:
             - GET
             - POST
@@ -34,7 +34,8 @@ micronaut:
 #     password: mysecretpassword
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/digimondb
+    # url: jdbc:postgresql://localhost:5432/digimondb
+    url: jdbc:postgresql://postgres:5432/digimondb
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: mysecretpassword
