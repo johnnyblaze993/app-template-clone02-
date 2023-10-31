@@ -19,7 +19,7 @@ function App() {
 	return (
 		<>
 			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-				Johns app!!!
+				Johns app!
 			</h2>
 			<button
 				style={{
