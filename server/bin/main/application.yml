@@ -7,7 +7,7 @@ micronaut:
       configurations:
         web:
           allowed-origins:
-            - "*"
+            - "http://localhost:7001"
           allowed-methods:
             - GET
             - POST
