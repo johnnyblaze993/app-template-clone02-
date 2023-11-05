@@ -19,7 +19,7 @@ function App() {
 	return (
 		<>
 			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-				Johns app!
+				Compose App!
 			</h2>
 			<button
 				style={{
@@ -34,7 +34,7 @@ function App() {
 				}}
 				onClick={fetchDigimons}
 			>
-				Load Digimons !
+				Load Test Data
 			</button>
 			<div style={{ display: "flex", flexWrap: "wrap" }}>
 				{digimons.map((digimon) => (
