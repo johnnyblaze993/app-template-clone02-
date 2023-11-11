@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import PokemonDetails from "./PokemonDetails";
 
 const PokemonList = () => {
@@ -9,11 +9,17 @@ const PokemonList = () => {
 	const isInitialMount = useRef(true);
 
 	const fetchPokemons = async () => {
-		if (!hasMore || pokemons.length >= 151) return;
+		// Calculate the number of Pokémon left to fetch to reach 151
+		const remaining = 151 - pokemons.length;
+		if (remaining <= 0) {
+			setHasMore(false);
+			return;
+		}
 
 		setLoading(true);
+		const limit = Math.min(10, remaining); // Fetch only the remaining Pokémon if less than 10
 		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`
+			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
 		);
 		const data = await response.json();
 		setPokemons((prev) => [
@@ -22,7 +28,7 @@ const PokemonList = () => {
 				...data.results.map((item) => ({ name: item.name, url: item.url })),
 			]),
 		]);
-		setOffset((prevOffset) => prevOffset + 10); // Update offset after successful fetch
+		setOffset((prevOffset) => prevOffset + limit); // Update offset by the number of Pokémon fetched
 		setLoading(false);
 	};
 
