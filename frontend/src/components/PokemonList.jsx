@@ -11,7 +11,7 @@ const style = {
 	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: "100%",
+	width: "80%",
 	maxHeight: "80%",
 	overflow: "auto",
 	bgcolor: "background.paper",
@@ -78,7 +78,7 @@ const PokemonList = () => {
 			>
 				<Box sx={style} id="modal-content">
 					<LinearProgress variant="determinate" value={progress} />
-					<h2 id="pokemon-modal-title">Kanto Pokémon</h2>
+					<h1 id="pokemon-modal-title">Kanto Pokédex</h1>
 					<div id="pokemon-modal-description">
 						<InfiniteScroll
 							dataLength={pokemons.length}
@@ -93,8 +93,26 @@ const PokemonList = () => {
 							scrollableTarget="modal-content"
 						>
 							{pokemons.map((pokemon, index) => (
-								<div key={pokemon.name}>
-									<p>{pokemon.name}</p>
+								<div
+									key={pokemon.name}
+									style={{
+										// display: "flex",
+										// flexDirection: "row",
+										// justifyContent: "space-between",
+										alignItems: "center",
+										borderBottom: "1px solid black",
+										paddingBottom: "5px",
+										marginBottom: "5px",
+									}}
+								>
+									<p>{index + 1}</p>
+									<p>
+										{
+											//make first letter uppercase
+											pokemon.name.charAt(0).toUpperCase() +
+												pokemon.name.slice(1)
+										}
+									</p>
 									<PokemonDetails url={pokemon.url} />
 								</div>
 							))}
