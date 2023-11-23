@@ -9,7 +9,9 @@ function App() {
 	return (
 		<>
 			<Nav />
-			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>PKM APP BOI</h2>
+			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+				PKM APP BOI!!!
+			</h2>
 			<Digimon />
 
 			<PokemonList />

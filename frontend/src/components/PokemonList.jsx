@@ -1,90 +1,107 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 import PokemonDetails from "./PokemonDetails";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+
+const style = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: "80%",
+	maxHeight: "80%",
+	overflow: "auto",
+	bgcolor: "background.paper",
+	border: "2px solid #000",
+	boxShadow: 24,
+	p: 4,
+};
 
 const PokemonList = () => {
 	const [pokemons, setPokemons] = useState([]);
 	const [offset, setOffset] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
-	const [fetchTriggered, setFetchTriggered] = useState(false);
-	const initialFetchCompleted = useRef(false);
+	const [open, setOpen] = useState(false);
+	const [progress, setProgress] = useState(0);
 
 	const fetchPokemons = async () => {
-		// Calculate the number of Pokémon left to reach 151
-		const remaining = 151 - pokemons.length;
-		if (remaining <= 0 || !fetchTriggered) {
+		if (pokemons.length >= 151) {
 			setHasMore(false);
 			return;
 		}
 
 		setLoading(true);
-		const limit = Math.min(10, remaining); // Fetch only the remaining Pokémon if less than 10
-		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
-		);
-		const data = await response.json();
-		setPokemons((prev) => [
-			...prev,
-			...data.results.map((item) => ({ name: item.name, url: item.url })),
-		]);
-
-		// Update offset only if there are more Pokémon to fetch
-		if (remaining > limit) {
+		try {
+			const limit = Math.min(10, 151 - pokemons.length);
+			const response = await axios.get(
+				`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+			);
+			setPokemons((prev) => [
+				...prev,
+				...response.data.results.map((item) => ({
+					name: item.name,
+					url: item.url,
+				})),
+			]);
 			setOffset((prevOffset) => prevOffset + limit);
+			// Update progress
+			setProgress(((pokemons.length + limit) / 151) * 100);
+		} catch (error) {
+			console.error("Error fetching data: ", error);
 		}
 		setLoading(false);
 	};
 
-	useEffect(() => {
-		if (fetchTriggered) {
+	const handleKantoClick = () => {
+		setOpen(true);
+		if (pokemons.length === 0) {
 			fetchPokemons();
 		}
-	}, [fetchTriggered, offset]);
+	};
 
-	// Intersection Observer for infinite scrolling
-	useEffect(() => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && hasMore && !loading) {
-					setOffset((prev) => prev + 10);
-				}
-			},
-			{ threshold: 0.5 }
-		);
-
-		const observerTarget = document.querySelector("#observer-target");
-		if (observerTarget) {
-			observer.observe(observerTarget);
-		}
-
-		return () => {
-			if (observerTarget) {
-				observer.unobserve(observerTarget);
-			}
-		};
-	}, [loading, hasMore]);
-
-	// 'Kanto' button click handler
-	const handleKantoClick = () => {
-		if (!fetchTriggered) {
-			setFetchTriggered(true);
-			setOffset(0); // Ensure offset is set to 0 on initial fetch
-		}
+	const fetchMoreData = () => {
+		fetchPokemons();
 	};
 
 	return (
 		<div>
-			<button onClick={handleKantoClick} disabled={fetchTriggered}>
-				Kanto
-			</button>
-			{pokemons.map((pokemon, index) => (
-				<div key={pokemon.name}>
-					<p>{pokemon.name}</p>
-					<PokemonDetails url={pokemon.url} />
-				</div>
-			))}
-			{loading && <p>Loading...</p>}
-			<div id="observer-target" style={{ height: "20px" }} />
+			<button onClick={handleKantoClick}>Kanto</button>
+			<Modal
+				open={open}
+				onClose={() => setOpen(false)}
+				aria-labelledby="pokemon-modal-title"
+				aria-describedby="pokemon-modal-description"
+			>
+				<Box sx={style} id="modal-content">
+					<LinearProgress variant="determinate" value={progress} />
+					<h2 id="pokemon-modal-title">Kanto Pokémon</h2>
+					<div id="pokemon-modal-description">
+						<InfiniteScroll
+							dataLength={pokemons.length}
+							next={fetchMoreData}
+							hasMore={hasMore}
+							loader={<div>Loading...</div>}
+							endMessage={
+								<p style={{ textAlign: "center" }}>
+									<b>Yay! You have seen it all</b>
+								</p>
+							}
+							scrollableTarget="modal-content"
+						>
+							{pokemons.map((pokemon, index) => (
+								<div key={pokemon.name}>
+									<p>{pokemon.name}</p>
+									<PokemonDetails url={pokemon.url} />
+								</div>
+							))}
+						</InfiniteScroll>
+					</div>
+				</Box>
+			</Modal>
 		</div>
 	);
 };
