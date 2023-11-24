@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 const PokemonDetails = ({ url }) => {
 	const [details, setDetails] = useState(null);
+
+	// TODO: Move this to a constants file
 	const pokemonBGColors = {
 		normal: "#A8A77A",
 		fire: "#EE8130",
@@ -34,6 +36,7 @@ const PokemonDetails = ({ url }) => {
 	}, [url]);
 
 	if (!details) {
+		// TODO: Add a loading spinner
 		return <p>Loading details...</p>;
 	}
 

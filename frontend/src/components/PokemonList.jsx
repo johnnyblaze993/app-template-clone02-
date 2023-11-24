@@ -28,6 +28,9 @@ const PokemonList = () => {
 	const [open, setOpen] = useState(false);
 	const [progress, setProgress] = useState(0);
 
+	// TODO seperate out the fetch so that we can reuse for other regions
+	// TODO create a variable for the number of pokemon in each region so we know when to stop. this can be  aconstant in its own file really. but keep in here for now.
+	// TODO create tests for this component
 	const fetchPokemons = async () => {
 		if (pokemons.length >= 151) {
 			setHasMore(false);
