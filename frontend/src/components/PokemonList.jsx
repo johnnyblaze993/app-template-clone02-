@@ -17,7 +17,6 @@ const PokemonList = () => {
 	const [offset, setOffset] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
-	const [open, setOpen] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [currentRegion, setCurrentRegion] = useState(null);
 	const [expandedPanel, setExpandedPanel] = useState(null);
