@@ -27,21 +27,36 @@ const PokemonList = () => {
 	const [hasMore, setHasMore] = useState(true);
 	const [open, setOpen] = useState(false);
 	const [progress, setProgress] = useState(0);
+	const [currentRegion, setCurrentRegion] = useState(null);
 
 	// TODO seperate out the fetch so that we can reuse for other regions
 	// TODO create a variable for the number of pokemon in each region so we know when to stop. this can be  aconstant in its own file really. but keep in here for now.
 	// TODO create tests for this component
-	const fetchPokemons = async () => {
-		if (pokemons.length >= 151) {
+
+	const REGION_RANGES = {
+		Kanto: { start: 1, end: 151 },
+		Johto: { start: 152, end: 251 },
+		Hoenn: { start: 252, end: 386 },
+	};
+
+	const fetchRegionPokemons = async (region) => {
+		const regionRange = REGION_RANGES[region];
+		const totalPokemonInRegion = regionRange.end - regionRange.start + 1;
+		const alreadyFetched = pokemons.length;
+
+		if (alreadyFetched >= totalPokemonInRegion) {
 			setHasMore(false);
 			return;
 		}
 
 		setLoading(true);
 		try {
-			const limit = Math.min(10, 151 - pokemons.length);
+			const limit = Math.min(10, totalPokemonInRegion - alreadyFetched);
+			// Calculate offset based on the region's starting point
+			const calculatedOffset = regionRange.start - 1 + alreadyFetched;
+
 			const response = await axios.get(
-				`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+				`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${calculatedOffset}`
 			);
 			setPokemons((prev) => [
 				...prev,
@@ -50,32 +65,87 @@ const PokemonList = () => {
 					url: item.url,
 				})),
 			]);
-			setOffset((prevOffset) => prevOffset + limit);
-			// Update progress
-			setProgress(((pokemons.length + limit) / 151) * 100);
+			setOffset(calculatedOffset + limit);
+			setProgress(((alreadyFetched + limit) / totalPokemonInRegion) * 100);
 		} catch (error) {
 			console.error("Error fetching data: ", error);
 		}
 		setLoading(false);
 	};
 
-	const handleKantoClick = () => {
+	const handleRegionClick = (region) => {
+		setPokemons([]);
+		setProgress(0);
 		setOpen(true);
-		if (pokemons.length === 0) {
-			fetchPokemons();
-		}
+		setCurrentRegion(region);
+		fetchRegionPokemons(region);
 	};
 
 	const fetchMoreData = () => {
-		fetchPokemons();
+		if (currentRegion) {
+			fetchRegionPokemons(currentRegion, offset, pokemons);
+		}
 	};
+
+	const handleModalClose = () => {
+		// Resetting states when modal is closed
+		setOpen(false);
+		setPokemons([]);
+		setOffset(0);
+		setProgress(0);
+		setCurrentRegion(null);
+		setHasMore(true);
+	};
+	// const fetchPokemons = async () => {
+	// 	if (pokemons.length >= 151) {
+	// 		setHasMore(false);
+	// 		return;
+	// 	}
+
+	// 	setLoading(true);
+	// 	try {
+	// 		const limit = Math.min(10, 151 - pokemons.length);
+	// 		const response = await axios.get(
+	// 			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+	// 		);
+	// 		setPokemons((prev) => [
+	// 			...prev,
+	// 			...response.data.results.map((item) => ({
+	// 				name: item.name,
+	// 				url: item.url,
+	// 			})),
+	// 		]);
+	// 		setOffset((prevOffset) => prevOffset + limit);
+	// 		// Update progress
+	// 		setProgress(((pokemons.length + limit) / 151) * 100);
+	// 	} catch (error) {
+	// 		console.error("Error fetching data: ", error);
+	// 	}
+	// 	setLoading(false);
+	// };
+
+	// const handleKantoClick = () => {
+	// 	setOpen(true);
+	// 	if (pokemons.length === 0) {
+	// 		fetchPokemons();
+	// 	}
+	// };
+
+	// const fetchMoreData = () => {
+	// 	fetchPokemons();
+	// };
 
 	return (
 		<div>
-			<button onClick={handleKantoClick}>Kanto</button>
+			{/* <button onClick={handleKantoClick}>Kanto</button> */}
+			{Object.keys(REGION_RANGES).map((region) => (
+				<button key={region} onClick={() => handleRegionClick(region)}>
+					{region}
+				</button>
+			))}
 			<Modal
 				open={open}
-				onClose={() => setOpen(false)}
+				onClose={handleModalClose}
 				aria-labelledby="pokemon-modal-title"
 				aria-describedby="pokemon-modal-description"
 			>
