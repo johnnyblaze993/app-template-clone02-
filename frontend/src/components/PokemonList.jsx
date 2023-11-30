@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PokemonDetails from "./PokemonDetails";
+import { REGION_RANGES } from "../constants/constants";
+
 
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -23,11 +25,11 @@ const PokemonList = () => {
 
 	// TODO create tests for this component
 
-	const REGION_RANGES = {
-		Kanto: { start: 1, end: 151 },
-		Johto: { start: 152, end: 251 },
-		Hoenn: { start: 252, end: 386 },
-	};
+	// const REGION_RANGES = {
+	// 	Kanto: { start: 1, end: 151 },
+	// 	Johto: { start: 152, end: 251 },
+	// 	Hoenn: { start: 252, end: 386 },
+	// };
 
 	//accordion
 	const handleAccordionChange = (panel) => (event, isExpanded) => {
@@ -113,7 +115,7 @@ const PokemonList = () => {
 							// You might need to adjust the scrollableTarget or other props to work with the accordion
 						>
 							{pokemons.map((pokemon, index) => (
-								<div key={pokemon.name} /* Add your styling here */>
+								<div key={pokemon.name}  role="pokemon" /* Add your styling here */>
 									<p>{pokemon.name}</p>
 									<PokemonDetails url={pokemon.url} />
 								</div>
