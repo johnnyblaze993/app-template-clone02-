@@ -23,14 +23,6 @@ const PokemonList = () => {
 	const [currentRegion, setCurrentRegion] = useState(null);
 	const [expandedPanel, setExpandedPanel] = useState(null);
 
-	// TODO create tests for this component
-
-	// const REGION_RANGES = {
-	// 	Kanto: { start: 1, end: 151 },
-	// 	Johto: { start: 152, end: 251 },
-	// 	Hoenn: { start: 252, end: 386 },
-	// };
-
 	//accordion
 	const handleAccordionChange = (panel) => (event, isExpanded) => {
 		if (isExpanded) {
