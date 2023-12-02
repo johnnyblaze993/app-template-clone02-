@@ -1,8 +1,11 @@
+/* eslint-disable jest/no-commented-out-tests */
 
 import React from "react";
 import { render, screen } from '@testing-library/react';
 import PokemonList from './PokemonList';
 import { fireEvent, waitFor } from '@testing-library/dom';
+
+
 
 describe('PokemonList', () => {
   
@@ -21,16 +24,8 @@ describe('PokemonList', () => {
     expect(screen.getByText(/Hoenn Region/i)).toBeInTheDocument();
   });
 
-  // it('loads Kanto region Pokemons when selected', async () => {
-  //   render(<PokemonList />);
-  //   fireEvent.click(screen.getByText(/Kanto Region/i)); // Simulate clicking the Kanto region accordion
-  //   await waitFor(() => {
-  //     // Assuming the accordion expands and fetches data, check if it renders the expected number of Pokemons
-  //     const expectedNumberOfPokemons = 151; // Number of Pokemons in Kanto region
-  //     expect(screen.getAllByTestId('pokemon-item').length).toBe(expectedNumberOfPokemons);
-  //   });
-  // });
 
+  //Kanto
   it('loads bulbasuar when Kanto region selected', async () => {
     render(<PokemonList />);
     fireEvent.click(screen.getByText(/Kanto Region/i)); 
@@ -60,4 +55,70 @@ describe('PokemonList', () => {
       expect(items[3]).toHaveTextContent('charmander'); // Check the first item for 'charmander'
     });
   });
+
+  //Johto
+  it('loads chikorita when Johto region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Johto Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[0]).toHaveTextContent('chikorita'); // Check the first item for 'chikorita'
+    });
+  });
+
+  it('loads cyndaquil when Johto region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Johto Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[3]).toHaveTextContent('cyndaquil'); // Check the first item for 'cyndaquil'
+    });
+  });
+
+  it('loads totodile when Johto region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Johto Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[6]).toHaveTextContent('totodile'); // Check the first item for 'totodile'
+    });
+  });
+  
+  //Hoenn
+  it('loads treecko when Hoenn region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Hoenn Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[0]).toHaveTextContent('treecko'); // Check the first item for 'treecko'
+    });
+  });
+
+  it('loads torchic when Hoenn region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Hoenn Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[3]).toHaveTextContent('torchic'); // Check the first item for 'torchic'
+    });
+  });
+
+  it('loads mudkip when Hoenn region selected', async () => {
+    render(<PokemonList />);
+    fireEvent.click(screen.getByText(/Hoenn Region/i)); 
+  
+    await waitFor(() => {
+      const items = screen.getAllByRole('pokemon'); 
+      expect(items[6]).toHaveTextContent('mudkip'); // Check the first item for 'mudkip'
+    });
+  });
+
+
 });
+
+

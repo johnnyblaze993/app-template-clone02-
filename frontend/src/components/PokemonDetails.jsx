@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import { pokemonBGColors } from "../constants/constants";
 
 const PokemonDetails = ({ url }) => {
@@ -47,5 +48,9 @@ const PokemonDetails = ({ url }) => {
 		</div>
 	);
 };
+
+PokemonDetails.propTypes = {
+	url: PropTypes.string.isRequired,  // Assuming url should be a string and is required
+  };
 
 export default PokemonDetails;

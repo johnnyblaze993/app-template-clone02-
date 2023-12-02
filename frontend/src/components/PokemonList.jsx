@@ -41,7 +41,7 @@ const PokemonList = () => {
 
 	const fetchRegionPokemons = async (
 		region,
-		currentOffset,
+		currentOffset, // Dont remove this, it's used to calculate the offset for the next fetch
 		currentPokemons
 	) => {
 		const regionRange = REGION_RANGES[region];
@@ -104,7 +104,7 @@ const PokemonList = () => {
 							next={fetchMoreData}
 							hasMore={hasMore} // If there is more data to load
 							loader={<p>Loading...</p>} // Loader element
-							// You might need to adjust the scrollableTarget or other props to work with the accordion
+							
 						>
 							{pokemons.map((pokemon, index) => (
 								<div key={pokemon.name}  role="pokemon" /* Add your styling here */>
