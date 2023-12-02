@@ -4,7 +4,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PokemonDetails from "./PokemonDetails";
 import { REGION_RANGES } from "../constants/constants";
 
-
 import LinearProgress from "@mui/material/LinearProgress";
 
 //accordion
@@ -104,10 +103,15 @@ const PokemonList = () => {
 							next={fetchMoreData}
 							hasMore={hasMore} // If there is more data to load
 							loader={<p>Loading...</p>} // Loader element
-							
 						>
 							{pokemons.map((pokemon, index) => (
-								<div key={pokemon.name}  role="pokemon" /* Add your styling here */>
+								<div
+									key={pokemon.name}
+									role="pokemon"
+									style={{
+										cursor: "pointer",
+									}} /* Add your styling here */
+								>
 									<p>{pokemon.name}</p>
 									<PokemonDetails url={pokemon.url} />
 								</div>
