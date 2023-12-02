@@ -85,8 +85,15 @@ const PokemonDetails = ({ url }) => {
 			>
 				<Box sx={style}>
 					<Typography id="modal-title" variant="h6">
-						{details.name}
+						{details.name.toUpperCase()}
 					</Typography>
+					{details.sprites && (
+						<img
+							src={details.sprites.front_shiny}
+							alt={details.name}
+							style={{ width: "100%", height: "auto" }}
+						/>
+					)}
 					<Typography id="modal-description" sx={{ mt: 2 }}>
 						Height: {details.height} <br />
 						Weight: {details.weight} <br />
