@@ -18,7 +18,7 @@ const PokemonDetails = ({ url }) => {
 
 	if (!details) {
 		// TODO: Add a loading spinner
-		return <CircularProgress color="success" size="lg" variant="outlined" />;
+		return <p>Loading details...</p>;
 	}
 
 	const backgroundStyle =
