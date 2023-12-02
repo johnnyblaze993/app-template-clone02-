@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { CircularProgress } from "@mui/material";
 
 const PokemonDetails = ({ url }) => {
 	const [details, setDetails] = useState(null);
@@ -37,7 +38,7 @@ const PokemonDetails = ({ url }) => {
 
 	if (!details) {
 		// TODO: Add a loading spinner
-		return <p>Loading details...</p>;
+		return <CircularProgress color="success" size="lg" variant="outlined" />;
 	}
 
 	const backgroundStyle =
