@@ -18,7 +18,7 @@ function App() {
 		>
 			{/* <Nav /> */}
 			<h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-				PKM APP BOI!!!
+				Test PKM Data
 			</h2>
 			{/* <Digimon /> */}
 
