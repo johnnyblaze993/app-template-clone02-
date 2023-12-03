@@ -14,6 +14,7 @@ function App() {
 				border: "2px solid #000",
 				boxShadow: 24,
 				p: 4,
+				marginTop: "17%",
 			}}
 		>
 			{/* <Nav /> */}

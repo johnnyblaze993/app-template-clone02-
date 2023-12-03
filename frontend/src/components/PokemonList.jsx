@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PokemonDetails from "./PokemonDetails";
@@ -12,6 +13,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const PokemonList = () => {
 	const [pokemons, setPokemons] = useState([]);
@@ -21,6 +28,31 @@ const PokemonList = () => {
 	const [progress, setProgress] = useState(0);
 	const [currentRegion, setCurrentRegion] = useState(null);
 	const [expandedPanel, setExpandedPanel] = useState(null);
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const accordionRef = useRef(null); // Create a ref
+
+	// Function to handle click outside
+	const handleClickOutside = (event) => {
+		if (accordionRef.current && !accordionRef.current.contains(event.target)) {
+			setExpandedPanel(null); // Close accordion
+		}
+	};
+
+	useEffect(() => {
+		// Add event listener
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			// Clean up
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
+	const handleSnackbarClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+		setSnackbarOpen(false);
+	};
 
 	//accordion
 	const handleAccordionChange = (panel) => (event, isExpanded) => {
@@ -63,6 +95,8 @@ const PokemonList = () => {
 					url: item.url,
 				})),
 			]);
+			setSnackbarOpen(true); // Open the Snackbar
+			setTimeout(() => setSnackbarOpen(false), 2000); // Close the Snackbar after 2 seconds
 			setOffset(calculatedOffset + limit);
 			setProgress(
 				((currentPokemons.length + limit) / totalPokemonInRegion) * 100
@@ -86,7 +120,7 @@ const PokemonList = () => {
 	};
 
 	return (
-		<div>
+		<div ref={accordionRef}>
 			{Object.keys(REGION_RANGES).map((region) => (
 				<Accordion
 					key={region}
@@ -125,6 +159,19 @@ const PokemonList = () => {
 					</AccordionDetails>
 				</Accordion>
 			))}
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={2000}
+				onClose={handleSnackbarClose}
+			>
+				<Alert
+					onClose={handleSnackbarClose}
+					severity="success"
+					sx={{ width: "100%" }}
+				>
+					Successfully fetched 10 Pokémon!
+				</Alert>
+			</Snackbar>
 		</div>
 	);
 };

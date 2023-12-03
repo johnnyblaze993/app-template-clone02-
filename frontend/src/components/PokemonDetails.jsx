@@ -35,10 +35,6 @@ const PokemonDetails = ({ url }) => {
 		return <p>Loading details...</p>;
 	}
 
-	if (details) {
-		console.log(details);
-	}
-
 	const backgroundStyle =
 		details.types.length === 2
 			? `linear-gradient(to right, ${
@@ -53,6 +49,21 @@ const PokemonDetails = ({ url }) => {
 			</Typography>
 		));
 	};
+
+	const imageContainerStyle = {
+		display: "flex",
+		justifyContent: "center",
+		gap: "10px",
+		margin: "10px 0",
+	};
+
+	const imageStyle = {
+		transition: "transform 0.3s ease-in-out",
+		height: "100px",
+		objectFit: "contain",
+		flexShrink: 0,
+	};
+
 	return (
 		<div>
 			<div
@@ -87,13 +98,47 @@ const PokemonDetails = ({ url }) => {
 					<Typography id="modal-title" variant="h6">
 						{details.name.toUpperCase()}
 					</Typography>
-					{details.sprites && (
-						<img
-							src={details.sprites.front_shiny}
-							alt={details.name}
-							style={{ width: "100%", height: "auto" }}
-						/>
-					)}
+					<div style={imageContainerStyle}>
+						{details.sprites && (
+							<>
+								<img
+									src={details.sprites.front_default}
+									alt={`${details.name} front`}
+									style={{
+										...imageStyle,
+										zIndex: 1,
+										transform: "scale(1)",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.transform = "scale(1.2)";
+										e.currentTarget.style.zIndex = 2;
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.transform = "scale(1)";
+										e.currentTarget.style.zIndex = 1;
+									}}
+								/>
+								<img
+									src={details.sprites.back_default}
+									alt={`${details.name} back`}
+									style={{
+										...imageStyle,
+										transform: "scale(0.8)",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.transform = "scale(1.2)";
+										e.currentTarget.previousSibling.style.transform =
+											"scale(0.8)";
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.transform = "scale(0.8)";
+										e.currentTarget.previousSibling.style.transform =
+											"scale(1)";
+									}}
+								/>
+							</>
+						)}
+					</div>
 					<Typography id="modal-description" sx={{ mt: 2 }}>
 						Height: {details.height} <br />
 						Weight: {details.weight} <br />
