@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jest/no-commented-out-tests */
 
 import React from "react";

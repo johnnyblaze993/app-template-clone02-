@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
@@ -15,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Paper from "@mui/material/Paper";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -119,8 +121,37 @@ const PokemonList = () => {
 		}
 	};
 
+	const progressBarStyle = {
+		height: "100%",
+		width: "100%",
+		borderRadius: "10px",
+	};
+
+	const progressBarContainerStyle = {
+		position: "fixed",
+		top: "20%", // Adjust for vertical positioning
+		right: "30px", // More space from the right edge
+		height: "3vh", // Adjust the height as needed
+		width: "15vh", // Width of the progress bar
+		// transform: "rotate(180deg)", // Rotate to fill from top to bottom
+		display: expandedPanel ? "block" : "none", // Show only when an accordion is open
+		borderRadius: "10px",
+	};
+
 	return (
 		<div ref={accordionRef}>
+			{/* Paper-wrapped Linear Progress Bar */}
+			{expandedPanel && (
+				<Paper style={progressBarContainerStyle} elevation={3}>
+					<LinearProgress
+						variant="buffer"
+						value={progress}
+						style={
+							progressBarStyle // Use the style object defined above
+						}
+					/>
+				</Paper>
+			)}
 			{Object.keys(REGION_RANGES).map((region) => (
 				<Accordion
 					key={region}

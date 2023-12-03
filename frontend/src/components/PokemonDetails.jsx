@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { pokemonBGColors } from "../constants/constants";
