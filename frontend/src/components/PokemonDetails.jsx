@@ -1,8 +1,20 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { pokemonBGColors } from "../constants/constants";
-import { CircularProgress, Modal, Box, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import {
+	CircularProgress,
+	Modal,
+	Box,
+	Typography,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+} from "@mui/material";
 
 const style = {
 	position: "absolute",
@@ -32,24 +44,30 @@ const PokemonDetails = ({ url }) => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	const createData = (name, value) => {
+		return { name, value };
+	};
+
+	const getTableRows = (details) => {
+		if (!details) return [];
+		return [
+			createData("Height", details.height),
+			createData("Weight", details.weight),
+			createData("Average Stats", calculateAverageStats(details.stats)),
+		];
+	};
+
+	const calculateAverageStats = (stats) => {
+		if (!stats) return 0;
+		const total = stats.reduce((acc, curr) => acc + curr.base_stat, 0);
+		return (total / stats.length).toFixed(2);
+	};
+
 	if (!details) {
 		return <p>Loading details...</p>;
 	}
 
-	const backgroundStyle =
-		details.types.length === 2
-			? `linear-gradient(to right, ${
-					pokemonBGColors[details.types[0].type.name]
-			  }, ${pokemonBGColors[details.types[1].type.name]})`
-			: pokemonBGColors[details.types[0].type.name];
-
-	const renderBaseStats = (stats) => {
-		return stats.map((statInfo) => (
-			<Typography key={statInfo.stat.name}>
-				{`${statInfo.stat.name.toUpperCase()}: ${statInfo.base_stat}`}
-			</Typography>
-		));
-	};
+	const rows = getTableRows(details);
 
 	const imageContainerStyle = {
 		display: "flex",
@@ -64,6 +82,13 @@ const PokemonDetails = ({ url }) => {
 		objectFit: "contain",
 		flexShrink: 0,
 	};
+
+	const backgroundStyle =
+		details.types.length === 2
+			? `linear-gradient(to right, ${
+					pokemonBGColors[details.types[0].type.name]
+			  }, ${pokemonBGColors[details.types[1].type.name]})`
+			: pokemonBGColors[details.types[0].type.name];
 
 	return (
 		<div>
@@ -89,13 +114,14 @@ const PokemonDetails = ({ url }) => {
 				</p>
 			</div>
 
-			<Modal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="modal-title"
-				aria-describedby="modal-description"
-			>
+			<Modal open={open} onClose={handleClose}>
 				<Box sx={style}>
+					<Button
+						onClick={handleClose}
+						style={{ position: "absolute", top: 8, right: 8 }}
+					>
+						Close
+					</Button>
 					<Typography id="modal-title" variant="h6">
 						{details.name.toUpperCase()}
 					</Typography>
@@ -140,22 +166,26 @@ const PokemonDetails = ({ url }) => {
 							</>
 						)}
 					</div>
-					<Typography id="modal-description" sx={{ mt: 2 }}>
-						Height: {details.height} <br />
-						Weight: {details.weight} <br />
-						<br />
-						Base Stats:
-						{details.stats ? (
-							renderBaseStats(details.stats)
-						) : (
-							<CircularProgress />
-						)}
-						<br />
-						Total Base Stats:{" "}
-						{details.stats
-							? details.stats.reduce((acc, curr) => acc + curr.base_stat, 0)
-							: null}
-					</Typography>
+					<TableContainer component={Paper} style={{ marginTop: "20px" }}>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>Stat</TableCell>
+									<TableCell align="right">Value</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{rows.map((row) => (
+									<TableRow key={row.name}>
+										<TableCell component="th" scope="row">
+											{row.name}
+										</TableCell>
+										<TableCell align="right">{row.value}</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
 				</Box>
 			</Modal>
 		</div>

@@ -22,6 +22,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+//todo: closing the modal also closes the accordian.
+
 const PokemonList = () => {
 	const [pokemons, setPokemons] = useState([]);
 	const [offset, setOffset] = useState(0);
@@ -125,6 +127,7 @@ const PokemonList = () => {
 		height: "100%",
 		width: "100%",
 		borderRadius: "10px",
+		zIndex: 100,
 	};
 
 	const progressBarContainerStyle = {
@@ -136,6 +139,7 @@ const PokemonList = () => {
 		// transform: "rotate(180deg)", // Rotate to fill from top to bottom
 		display: expandedPanel ? "block" : "none", // Show only when an accordion is open
 		borderRadius: "10px",
+		zIndex: 100,
 	};
 
 	return (
@@ -144,7 +148,7 @@ const PokemonList = () => {
 			{expandedPanel && (
 				<Paper style={progressBarContainerStyle} elevation={3}>
 					<LinearProgress
-						variant="buffer"
+						variant="determinate"
 						value={progress}
 						style={
 							progressBarStyle // Use the style object defined above
