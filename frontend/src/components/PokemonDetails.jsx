@@ -1,7 +1,9 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { pokemonBGColors } from "../constants/constants";
 import Button from "@mui/material/Button";
+import axios from "axios";
 import {
 	CircularProgress,
 	Modal,
@@ -33,9 +35,13 @@ const PokemonDetails = ({ url }) => {
 
 	useEffect(() => {
 		const fetchDetails = async () => {
-			const response = await fetch(url);
-			const data = await response.json();
-			setDetails(data);
+			try {
+				const response = await axios.get(url); // Using axios to fetch data
+				setDetails(response.data);
+			} catch (error) {
+				console.error("Error fetching Pokemon details:", error);
+				// Handle error appropriately
+			}
 		};
 
 		fetchDetails();
@@ -93,6 +99,7 @@ const PokemonDetails = ({ url }) => {
 	return (
 		<div>
 			<div
+				data-testid="open-modal"
 				onClick={handleOpen}
 				style={{
 					backgroundColor:
