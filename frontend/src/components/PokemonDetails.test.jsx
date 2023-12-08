@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-commented-out-tests */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { render, waitFor, screen, fireEvent } from "@testing-library/react";
@@ -11,16 +12,22 @@ jest.mock("axios");
 describe("PokemonDetails", () => {
 	const mockResponse = {
 		data: {
-			height: 3,
-			weight: 40,
+			// Include 'stats' in your mock response
 			stats: [
-				{ base_stat: 48, stat: { name: "hp" } },
-				{ base_stat: 48, stat: { name: "attack" } },
-				{ base_stat: 48, stat: { name: "defense" } },
-				{ base_stat: 48, stat: { name: "special-attack" } },
-				{ base_stat: 48, stat: { name: "special-defense" } },
-				{ base_stat: 48, stat: { name: "speed" } },
+				{ base_stat: 45, stat: { name: "speed" } },
+				// ... include other stats as needed
 			],
+			types: [
+				{
+					slot: 1,
+					type: { name: "grass", url: "https://pokeapi.co/api/v2/type/12/" },
+				},
+				{
+					slot: 2,
+					type: { name: "poison", url: "https://pokeapi.co/api/v2/type/4/" },
+				},
+			],
+			// ... other data fields
 		},
 	};
 
@@ -47,24 +54,8 @@ describe("PokemonDetails", () => {
 		// Set up mock response
 		const mockResponse = {
 			data: {
-				abilities: [
-					{
-						is_hidden: false,
-						slot: 1,
-						ability: {
-							name: "overgrow",
-							url: "https://pokeapi.co/api/v2/ability/65/",
-						},
-					},
-					{
-						is_hidden: true,
-						slot: 3,
-						ability: {
-							name: "chlorophyll",
-							url: "https://pokeapi.co/api/v2/ability/34/",
-						},
-					},
-				],
+				name: "Bulbasaur", // Make sure this is defined
+				// ... other data fields
 				types: [
 					{
 						slot: 1,
@@ -75,29 +66,27 @@ describe("PokemonDetails", () => {
 						type: { name: "poison", url: "https://pokeapi.co/api/v2/type/4/" },
 					},
 				],
-				base_experience: 64,
-				height: 7,
-				weight: 69,
-				name: "bulbasaur",
-				// ... other fields
 			},
 		};
 		axios.get.mockResolvedValue(mockResponse);
 
-		// Render the component
-		const { getByText } = render(
-			<PokemonDetails url="https://pokeapi.co/api/v2/pokemon/1/" />
-		);
+		// Use `act` to ensure all state updates and effects are processed
+		await act(async () => {
+			render(<PokemonDetails url="https://pokeapi.co/api/v2/pokemon/1/" />);
+		});
 
-		// Wait for the data to be displayed
+		await act(async () => {
+			fireEvent.click(screen.getByTestId("open-modal"));
+		});
+
+		// Wait for the mock data to be loaded and displayed
 		await waitFor(() => {
-			const typesElement = getByText(/grass, poison/);
-			const typesText = typesElement.textContent;
-			const types = typesText.split(",").map((type) => type.trim());
-			expect(typesElement).toBeInTheDocument();
-			expect(types).toHaveLength(2);
+			// Replace this with a check that confirms the data is displayed
+			const typesElement = screen.getByTestId("types-display");
+			expect(typesElement).toHaveTextContent("grass, poison");
 		});
 	});
+
 	it("displays loding message when no data is available", () => {
 		render(<PokemonDetails url="falseURLLol" />);
 		expect(screen.getByText(/Loading details.../i)).toBeInTheDocument();

@@ -1,11 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { pokemonBGColors } from "../constants/constants";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {
-	CircularProgress,
 	Modal,
 	Box,
 	Typography,
@@ -55,12 +54,19 @@ const PokemonDetails = ({ url }) => {
 	};
 
 	const getTableRows = (details) => {
-		if (!details) return [];
-		return [
-			createData("Height", details.height),
-			createData("Weight", details.weight),
-			createData("Average Stats", calculateAverageStats(details.stats)),
-		];
+		if (!details || !details.stats) return [];
+		// This maps over the stats array and creates a row for each base stat
+		const rows = details.stats.map((stat) =>
+			createData(stat.stat.name, stat.base_stat)
+		);
+
+		// Additional rows for height, weight, and average stats
+		rows.push(createData("Height", details.height));
+		rows.push(createData("Weight", details.weight));
+		rows.push(
+			createData("Average Stats", calculateAverageStats(details.stats))
+		);
+		return rows;
 	};
 
 	const calculateAverageStats = (stats) => {
@@ -72,6 +78,8 @@ const PokemonDetails = ({ url }) => {
 	if (!details) {
 		return <p>Loading details...</p>;
 	}
+
+	const name = details.name ? details.name.toUpperCase() : "Unknown";
 
 	const rows = getTableRows(details);
 
@@ -116,7 +124,7 @@ const PokemonDetails = ({ url }) => {
 					width: "100%",
 				}}
 			>
-				<p>
+				<p data-testid="types-display">
 					{details.types.map((typeEntry) => typeEntry.type.name).join(", ")}
 				</p>
 			</div>
@@ -130,7 +138,7 @@ const PokemonDetails = ({ url }) => {
 						Close
 					</Button>
 					<Typography id="modal-title" variant="h6">
-						{details.name.toUpperCase()}
+						{name}
 					</Typography>
 					<div style={imageContainerStyle}>
 						{details.sprites && (
